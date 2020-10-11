@@ -3,36 +3,10 @@ const bcrypt = require("bcryptjs");
 const {loginValidation,registerValidation} = require('../validation')
 const User = require('../models/User')
 const dotenv = require('dotenv')
-const nodemailer = require('nodemailer');
 
 const router = express.Router();
 dotenv.config();
 
-router.post('/email',async(req,res)=>{
-
-    let transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-          user: process.env.GMAIL_USERNAME,
-          pass: process.env.GMAIL_PASSWORD,
-        },
-      });
-      
-      let mailOptions = {
-        from: process.env.GMAIL_USERNAME,
-        to: req.body.to,
-        subject: req.body.subject,
-        text: req.body.text,
-      };
-      
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            return res.status(400).send("Email does not Exist")  
-        } else {
-            res.status(200).send("Email Sent Successfully")
-        }
-      });
-})
 
 router.post("/register", async(req,res)=>{
     const {error} = registerValidation(req.body)  
@@ -58,7 +32,7 @@ router.post("/register", async(req,res)=>{
 
     try {
         const savedUser = await user.save();
-        res.send(savedUser);
+        res.status(200).send("User Registered Successfully");
     } catch(err){
         res.statusCode(400).send(err)
     }
@@ -77,7 +51,7 @@ router.post('/login',async(req,res)=>{
     if(!validPass){
         return res.status(400).send("Invalid Password")
     }
-    res.send("Logged In");
+    res.status(200).send(user);
 })
 
 
