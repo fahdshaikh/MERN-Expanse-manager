@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container';
 import { useState } from 'react';
 import axios from 'axios'
 import {Link, useHistory} from 'react-router-dom'
+import { AppContext } from './ContextAPI/AppContextProvider';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,16 +39,19 @@ export default function SignIn() {
   let [email,setEmail] = useState('')
   let [password,setPassword] = useState('')
   const history = useHistory()
+  const {setUserId} = useContext(AppContext)
   
   const handleSubmit  = ()=>{
      axios.post("http://localhost:5000/api/user/login",{email:email,password:password})
      .then(res=>{
-        history.push('/dashboard')
+        setUserId(res.data._id)
      })
+     .then(res=> history.push('/dashboard'))
      .catch(err=>{alert(err.response.data)})
   }
 
   return (
+
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -84,16 +88,18 @@ export default function SignIn() {
             onChange ={(e)=>setPassword(e.target.value)}
             autoComplete="current-password"
           />
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick ={handleSubmit}
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
+        
+              <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick ={()=>handleSubmit()}
+              className={classes.submit}
+              >
+              Sign In
+            </Button>         
+
           <Grid container>
             <Grid item>
               <Link to="/register" variant="body2">

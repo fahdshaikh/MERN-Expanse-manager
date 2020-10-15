@@ -1,8 +1,12 @@
 import React from 'react';
+import { AppContext } from './ContextAPI/AppContextProvider'
 
 function Dashboard(){
     return (
-        <h1>Dashboard</h1>
+        <AppContext.Consumer>{   
+        ({userId})=><h1>{userId}</h1>
+        }
+        </AppContext.Consumer>
     )
 }
 
