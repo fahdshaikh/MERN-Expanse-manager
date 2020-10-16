@@ -11,6 +11,8 @@ import Container from '@material-ui/core/Container';
 import { useState } from 'react';
 import axios from 'axios'
 import {Link} from 'react-router-dom';
+import Box from '@material-ui/core/Box';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +33,28 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  background:{
+    backgroundImage:"url('d.jpg')",
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
+    backgroundSize: "cover",
+  },
+  foreground:{
+      backgroundImage:"url('ss.jpeg')",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "fixed",
+      backgroundSize: "cover",
+      color:"white",
+      padding:40
+  },
+  bottom:{
+    marginBottom: theme.spacing(10),
+  },
+  introDiv:{
+    textAlign:"left",
+    fontSize:20,
+    lineHeight:1
+  }
 }));
 
 export default function SignUp() {
@@ -39,15 +63,35 @@ export default function SignUp() {
   let [name,setName] = useState('')
   let [email,setEmail] = useState('')
   let [password,setPassword] = useState('')
+  let [errMsg,setErrMsg] = useState('')
   
   const handleSubmit  = ()=>{
      axios.post("http://localhost:5000/api/user/register",{email:email,password:password,name:name})
      .then(res=> alert("Successfully Signed Up!"))
-     .catch(err=>alert(err.response.data))
+     .catch(err=>{setErrMsg(err.response.data)})
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box component={Grid} container  className={classes.background} spacing={0} direction="column" justify="center" style={{ minHeight: '100vh' }}>
+      
+    <Box component={Grid} container >
+      <Box component={Grid}  container item lg={2}>
+    </Box>
+
+      <Box component={Grid} boxShadow={20} container item className={classes.foreground} xs={4}>
+        
+          <div className={classes.introDiv}>
+            <h1 style={{fontSize:70,fontWeight:"bold"}}>WELCOME</h1>
+            <h1>ONE</h1>
+            <h1>STOP TO</h1>
+            <h1>MANAGE ALL YOUR</h1>
+            <h1 style={{color:"#FF5722"}}> EXPENSES.</h1>
+          </div>
+        
+      </Box>
+
+      <Box component={Grid}  boxShadow={20} container item style={{backgroundColor:"whitesmoke"}} lg={4}>
+      <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -105,15 +149,20 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container>
-            <Grid item>
+          {errMsg!==""?<h4 style={{color:"red",lineHeight:0}}>{errMsg}</h4>:null}
+          <Box component={Grid} container className={classes.bottom}>
+            <Box component={Grid} item>
               <Link to="/">
                 {"Already have an account? Sign In"}
               </Link>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </form>
       </div>
     </Container>
+    </Box>
+    </Box>
+   
+    </Box>
   );
 }
