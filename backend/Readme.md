@@ -117,7 +117,7 @@ Failure messages accordingly
 ```
 ##### -- To get all the Credit details of the particular user in descending order ( New to Old ).
 #
-Get URL - `http://localhost:<PORT NUMBER>/api/transaction/get/credit?limit=<Number>`
+Get URL - `http://localhost:<PORT NUMBER>/api/transaction/get/credit?page=<Number>&limit=<Number>`
 
 PARAMS
 ```
@@ -155,7 +155,7 @@ Failure messages accordingly
 ```
 ##### -- To get all the Debit details of the particular user in descending order ( New to Old ).
 #
-Get URL - `http://localhost:<PORT NUMBER>/api/transaction/get/debit?limit=<Number>`
+Get URL - `http://localhost:<PORT NUMBER>/api/transaction/get/debit?page=<Number>&limit=<Number>`
 
 PARAMS
 ```

@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router";
 import SignIn from "./Signin";
 import SignUp from './Signup';
 import Dashboard from './Dashboard';
+import Ledger from './Ledger'
 
 
 function Routes(){
@@ -19,6 +20,10 @@ function Routes(){
             <Route path="/dashboard">
                 <Dashboard></Dashboard>
             </Route>
+            <Route path="/ledger">
+                <Ledger></Ledger>
+            </Route>
+            
 
         </Switch>
 )}

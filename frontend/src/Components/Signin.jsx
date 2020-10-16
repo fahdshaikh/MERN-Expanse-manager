@@ -72,7 +72,7 @@ export default function SignIn() {
      .then(res=>{
         setUserId(res.data._id)
      })
-     .then(res=> history.push('/dashboard'))
+     .then(res=> history.push('/ledger'))
      .catch(err=>{setErrMsg(err.response.data)})
   }
 

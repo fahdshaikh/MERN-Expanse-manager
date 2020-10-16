@@ -26,7 +26,7 @@ router.post("/post",async(req,res)=>{
 })
 
 router.get("/get",async(req,res)=>{
-    const uid = req.body.user_id
+    const uid = String(req.query.user_id);
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
 
@@ -48,7 +48,8 @@ router.get("/get",async(req,res)=>{
         }
     }
     try{
-        results.current = await Transaction.find({user_id:uid}).limit(limit).skip(startIndex).exec();
+        results.current = await Transaction.find({user_id:uid}).sort({_id:-1}).limit(limit).skip(startIndex).exec();
+        results.total = await Transaction.find({user_id:uid}).countDocuments().exec();
         res.json(results);
     } catch(error){
         res.status(500).send(err)
@@ -56,28 +57,67 @@ router.get("/get",async(req,res)=>{
 })
 
 router.get('/get/credit',async(req,res)=>{
-    const uid = req.body.user_id
-    const limit = parseInt(req.query.limit)
-    
+    const uid = String(req.query.user_id);
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const results = {}
+
+    const startIndex = (page-1)*limit;
+    const endIndex = (page)*limit;
+
+    if(endIndex < await Transaction.find({user_id:uid}).countDocuments().exec()){
+        results.next = {
+            page:page+1,
+            limit:limit
+        }
+    }
+    if(startIndex>0){
+        results.prev - {
+            page:page-1,
+            limit:limit
+        }
+    }
     try{
-       let results = await Transaction.find({user_id:uid,type:"Credit"}).sort({_id:-1}).limit(limit).exec();
-        res.json(results)
-    }catch(error){
-        res.status(500).send(error)
+        results.current = await Transaction.find({user_id:uid,type:"Credit"}).sort({_id:-1}).limit(limit).skip(startIndex).exec();
+        results.total = await Transaction.find({user_id:uid,type:"Credit"}).countDocuments().exec();
+        res.json(results);
+    } catch(error){
+        res.status(500).send(err)
     }
 })
 
 router.get('/get/debit',async(req,res)=>{
-    const uid = req.body.user_id
-    const limit = parseInt(req.query.limit)
-    
+    const uid = String(req.query.user_id);
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const results = {}
+
+    const startIndex = (page-1)*limit;
+    const endIndex = (page)*limit;
+
+    if(endIndex < await Transaction.find({user_id:uid}).countDocuments().exec()){
+        results.next = {
+            page:page+1,
+            limit:limit
+        }
+    }
+    if(startIndex>0){
+        results.prev - {
+            page:page-1,
+            limit:limit
+        }
+    }
     try{
-       let results = await Transaction.find({user_id:uid,type:"Debit"}).sort({_id:-1}).limit(limit).exec();
-        res.json(results)
-    }catch(error){
-        res.status(500).send(error)
+        results.current = await Transaction.find({user_id:uid,type:"Debit"}).sort({_id:-1}).limit(limit).skip(startIndex).exec();
+        results.total = await Transaction.find({user_id:uid,type:"Debit"}).countDocuments().exec();
+        res.json(results);
+    } catch(error){
+        res.status(500).send(err)
     }
 })
+
 //FUTURE WORK TO DIRECTLY ACCESS THE SUM OF CREDIT AND DEBIT VALUES.....
 
 // router.get('/details',async(req,res)=>{
