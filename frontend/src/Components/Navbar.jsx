@@ -130,10 +130,10 @@ import {
           }}
         >
           <div className={classes.drawerHeader}>
-            <Avatar ><img src="../../public/logo192.png" /></Avatar> 
-            <Typography variant="h6"> MERN Expense Manager </Typography>
-            <Typography variant="subtitle1">-- Alok Kothiyal</Typography>
-            <Typography variant="subtitle1">-- Fahad Shaikh </Typography>
+            {/* <Avatar> R  </Avatar> */}
+            <Typography variant="h6"><i class="fab fa-react fa-2x icon" style={{backgroundColor:"#00d7ff"}}></i> </Typography>
+            <Typography variant="h6">-- Alok Kothiyal</Typography>
+            <Typography variant="h6">-- Fahad Shaikh </Typography>
           </div>
           <Divider />
           {[
