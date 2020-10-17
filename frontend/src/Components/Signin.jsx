@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
       padding:40
   },
   bottom:{
-    marginBottom: theme.spacing(8),
+    marginBottom: theme.spacing(10),
   },
   introDiv:{
     textAlign:"left",
