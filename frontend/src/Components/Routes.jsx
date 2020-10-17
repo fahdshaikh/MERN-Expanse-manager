@@ -2,8 +2,10 @@ import React from 'react';
 import { Route, Switch } from "react-router";
 import SignIn from "./Signin";
 import SignUp from './Signup';
-import Dashboard from './Dashboard';
+// import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/Dashboard';
 import Ledger from './Ledger'
+import ExpenseManager from './ExpenseManager'
 
 
 function Routes(){
@@ -17,10 +19,14 @@ function Routes(){
                 <SignUp></SignUp>
             </Route>
 
-            <Route path="/dashboard">
+            <Route path="/ExpenseManager">
+                <ExpenseManager></ExpenseManager>
+            </Route>
+
+            <Route path="/ExpenseManager">
                 <Dashboard></Dashboard>
             </Route>
-            <Route path="/ledger">
+            <Route path="/ExpenseManager/ledger">
                 <Ledger></Ledger>
             </Route>
             

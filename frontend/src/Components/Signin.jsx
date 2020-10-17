@@ -13,6 +13,7 @@ import { useState } from 'react';
 import axios from 'axios'
 import {Link, useHistory} from 'react-router-dom'
 import { AppContext } from './ContextAPI/AppContextProvider';
+import ExpenseManager from './ExpenseManager'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +73,7 @@ export default function SignIn() {
      .then(res=>{
         setUserId(res.data._id)
      })
-     .then(res=> history.push('/ledger'))
+     .then(res=> history.push('/ExpenseManager'))
      .catch(err=>{setErrMsg(err.response.data)})
   }
 
