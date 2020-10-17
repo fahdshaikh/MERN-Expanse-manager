@@ -10,10 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useState } from 'react';
 import axios from 'axios'
-import {Link} from 'react-router-dom';
+import {Link,useHistory} from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-
-
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
       padding:40
   },
   bottom:{
-    marginBottom: theme.spacing(10),
+    marginBottom: theme.spacing(22),
   },
   introDiv:{
     textAlign:"left",
@@ -59,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
+  
+  const history = useHistory()
   let [name,setName] = useState('')
   let [email,setEmail] = useState('')
   let [password,setPassword] = useState('')
@@ -67,7 +67,7 @@ export default function SignUp() {
   
   const handleSubmit  = ()=>{
      axios.post("http://localhost:5000/api/user/register",{email:email,password:password,name:name})
-     .then(res=> alert("Successfully Signed Up!"))
+     .then(res=>history.push('/'))
      .catch(err=>{setErrMsg(err.response.data)})
   }
 
