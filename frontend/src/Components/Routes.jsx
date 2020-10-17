@@ -23,9 +23,6 @@ function Routes(){
                 <ExpenseManager></ExpenseManager>
             </Route>
 
-            <Route path="/ExpenseManager">
-                <Dashboard></Dashboard>
-            </Route>
             <Route path="/ExpenseManager/ledger">
                 <Ledger></Ledger>
             </Route>
