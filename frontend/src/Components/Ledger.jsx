@@ -72,9 +72,9 @@ function Ledger(){
         .catch(err=>console.log(err))
     },[page,limit,type])
 
-    const handleChange = (type)=>{
-        setPage(1)
-        setType(type)
+    const handleChange = async(type)=>{
+        await setPage(1)
+       setType(type)
     }
 
     return (        

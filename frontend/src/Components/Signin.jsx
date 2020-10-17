@@ -13,8 +13,6 @@ import { useState } from 'react';
 import axios from 'axios'
 import {Link, useHistory} from 'react-router-dom'
 import { AppContext } from './ContextAPI/AppContextProvider';
-import ExpenseManager from './ExpenseManager'
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -133,7 +131,7 @@ export default function SignIn() {
             onChange ={(e)=>setPassword(e.target.value)}
             autoComplete="current-password"
             />
-          {errMsg!==""?<h3 style={{color:"red",lineHeight:0}}>{errMsg}</h3>:null}
+          {errMsg!==""?<h5 style={{color:"red",lineHeight:0}}>{errMsg}</h5>:null}
           <Button
           type="button"
           fullWidth

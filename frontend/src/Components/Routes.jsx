@@ -19,11 +19,11 @@ function Routes(){
                 <SignUp></SignUp>
             </Route>
 
-            <Route path="/ExpenseManager">
+            <Route  exact path="/ExpenseManager">
                 <ExpenseManager></ExpenseManager>
             </Route>
 
-            <Route path="/ExpenseManager/ledger">
+            <Route exact path="/ExpenseManager/ledger">
                 <Ledger></Ledger>
             </Route>
             

@@ -7,6 +7,7 @@ import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
@@ -57,16 +58,35 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 export default function Dashboard() {
-  // const userIdContext = useContext(AppContext)
+
   let {userId} = useContext(AppContext)
   const classes = useStyles();
   let [totalCredit, setTotalCredit] = useState(0)
   let [totalDebit, setTotalDebit] = useState(0)
   let [balance, setBalance] = useState(0)
-  let [transaction, setTransaction] = useState([])
   let [title, setTitle] = useState("")
   let [amt, setAmt] = useState(0)
-  // const newTransaction
+  let [data, setData] = useState([])
+
+ const getData =()=>{
+  axios.get('http://localhost:5000/api/transaction/get',{params:{"user_id":userId}})
+  .then((res)=>{
+    setData(res.data.current.map(item=>item))
+    setTotalDebit(res.data.current.filter(item=>item.type=="Debit").reduce((ac,item,i)=>{
+        return ac+Number(item.amount)
+    },0))
+    setTotalCredit(res.data.current.filter(item=>item.type=="Credit").reduce((ac,item,i)=>{
+      return ac+Number(item.amount)
+  },0))
+  })
+  .catch(err=>console.log(err))
+  }
+  
+  useEffect(()=>{
+    getData()
+  },[totalDebit,totalCredit])
+
+  useEffect( () => console.log("Responsssse",data)  , [data] )
 
   // Checkbox
   const [type, setType] = useState({
@@ -74,38 +94,29 @@ export default function Dashboard() {
     debit: false,
   });
 
-  const handleType = (event) => {
-    setType({ ...type, [event.target.name]: event.target.checked });
+  const handleType = async(event) => {
+    await setType({ ...type, [event.target.name]: event.target.checked });
     console.log(type)
   };
 
   const { credit, debit } = type;
   const error = [credit, debit].filter((v) => v).length !== 1;
 
-  // new transaction submit 
+ 
   const handleSubmit = () => {
-    setTransaction()
     console.log(userId,title,amt,type)
+    
+  axios.post('http://localhost:5000/api/transaction/post',{"user_id":userId,
+    "title":title,
+    "type":type.credit==true?"Credit":"Debit",
+      amount:amt})
+  .then(res=>getData())
+  .catch(err=>console.log(err))
   }
 
-  useEffect(() => {
-    setTransaction( {
-      userId,
-      title,
-      amt,
-      type
-    })
-  },[transaction])
-  
-  
-  useEffect(() => {
-    setBalance(totalCredit-totalDebit)    
-  },[balance])
-  
   return (
     <div >
       {/* // Credit Debit Balance */}
-      <h1>{userId}</h1>
       <GridContainer>
         <GridItem xs={12} sm={6} md={4}>
           <Card style={{borderRight: `5px solid ${successColor[1]}`}}>
@@ -148,17 +159,17 @@ export default function Dashboard() {
                 <Icon>account_balance</Icon>
               </CardIcon>
               <p className={classes.cardCategory} style={{color: `${infoColor[1]}`}}>Balance</p>
-              {(balance < 0)?
-               (<h3 className={classes.cardTitle} style={{color: `${dangerColor[1]}`}}>{`₹ ${Math.abs(balance)}`}</h3>)
-               :(balance === 0)?(<h3 className={classes.cardTitle} >{`₹ ${balance}`}</h3>)
-               :(<h3 className={classes.cardTitle} style={{color: `${successColor[1]}`}}>{`₹ ${balance}`}</h3>)
+              {(totalCredit-totalDebit < 0)?
+               (<h3 className={classes.cardTitle} style={{color: `${dangerColor[1]}`}}>{`₹ ${Math.abs(totalCredit-totalDebit)}`}</h3>)
+               :(totalCredit-totalDebit === 0)?(<h3 className={classes.cardTitle} >{`₹ ${totalCredit-totalDebit}`}</h3>)
+               :(<h3 className={classes.cardTitle} style={{color: `${successColor[1]}`}}>{`₹ ${totalCredit-totalDebit}`}</h3>)
               }
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
               <ReceiptRoundedIcon  style={{ color: infoColor[1] }}/>
-                Credit - Debit: {(balance < 0)?
-                  (`You are in Deficit of ₹ ${Math.abs(balance)}`):(balance === 0)?(`You don't have any Money`):(`You are in Surplus of ₹ ${balance}`)
+                Credit - Debit: {(totalCredit-totalDebit < 0)?
+                  (`You are in Deficit of ₹ ${Math.abs(totalCredit-totalDebit)}`):(totalCredit-totalDebit === 0)?(`You don't have any Money`):(`You are in Surplus of ₹ ${totalCredit-totalDebit}`)
                 }
               </div>
             </CardFooter>
@@ -189,6 +200,20 @@ export default function Dashboard() {
                       <StyledTableCell align="center">Time</StyledTableCell>
                     </TableRow>
                   </TableHead>
+                  <TableBody>
+                    { data.slice(0,6).map((item,i) => (
+                      <StyledTableRow key={item._id}>
+                        <StyledTableCell component="th" align="center">
+                          {(i+1)}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">{item.title}</StyledTableCell>
+                        <StyledTableCell style = {item.type!=="Credit"?{color:"red"}:{color:"green"}} align="center">{item.type}</StyledTableCell>
+                        <StyledTableCell style = {item.type!=="Credit"?{color:"red"}:{color:"green"}} align="center">{item.type==="Credit"?`+ ${item.amount}`:`- ${item.amount}`}</StyledTableCell>
+                        <StyledTableCell align="center">{item.timestamp}</StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+
                 </Table>
               </TableContainer>
             </CardBody>
@@ -239,8 +264,8 @@ export default function Dashboard() {
                     required
                     fullWidth
                     name="amt"
-                    label="Ammount"
-                    type="amt"
+                    label="Amount"
+                    type="Number"
                     id="amt"
                     value ={amt}
                     onChange ={(e)=>setAmt(e.target.value)}

@@ -12,7 +12,7 @@ import { useState } from 'react';
 import axios from 'axios'
 import {Link,useHistory} from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-import Alert from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -149,7 +149,7 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          {errMsg!==""?<h4 style={{color:"red",lineHeight:0}}>{errMsg}</h4>:null}
+          {errMsg!==""?<h6 style={{color:"red",lineHeight:0}}>{errMsg}</h6>:null}
           <Box component={Grid} container className={classes.bottom}>
             <Box component={Grid} item>
               <Link to="/">

@@ -131,7 +131,7 @@ import {
         >
           <div className={classes.drawerHeader}>
             {/* <Avatar> R  </Avatar> */}
-            <Typography variant="h6"><i class="fab fa-react fa-2x icon" style={{backgroundColor:"#00d7ff"}}></i> </Typography>
+            <Typography variant="h6"><i className="fab fa-react fa-2x icon" style={{backgroundColor:"#00d7ff"}}></i> </Typography>
             <Typography variant="h6">-- Alok Kothiyal</Typography>
             <Typography variant="h6">-- Fahad Shaikh </Typography>
           </div>
